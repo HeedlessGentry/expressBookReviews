@@ -135,4 +135,24 @@ public_users.get('/author/:author', async function (req,res) {
     }
 });
 
+//Task 13: Get book by Title
+//Async function to fetch books by title
+public_users.get('/title/:title', async function (req,res) {
+    try {
+        const title = req.params.title.toLowerCase();
+        const response = await new Promise((resolve) => {
+            const filteredBooks = Object.values(books).filter(book => book.title.toLowerCase() ===  title);
+            resolve(filteredBooks);
+        });
+
+        if (response.length > 0) {
+            res.status(200).json(response);
+        } else {
+            res.status(404).json({ message: "No books with this title." });
+        }
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching books with this title"});
+    }
+});
+
 module.exports.general = public_users;
