@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
@@ -85,6 +86,53 @@ public_users.get('/review/:isbn',function (req, res) {
   } else {
     res.status(404).json({message: "Book not found FAGGOT!!"});
   }
+});
+
+//Task 10. Get all books using Async/Await & Axios
+//Async function to fetch all books
+public_users.get( '/', async function (req,res) {
+    try {
+        const response = await new Promise((resolve) => resolve(books));
+        res.status(200).json(response);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching books."});
+    }
+});
+
+//Task 11. Get book by ISBN using Async/Await & Axios
+//Async function to fetch book by ISBN
+public_users.get('/isbn/:isbn', async function (req,res) {
+    try {
+        const isbn = req.params.isbn;
+        const response = await new Promise((resolve) => resolve(books[isbn]));
+        if (response) {
+            res.status(200).json(response);
+        } else {
+            res.status(404).json({message: "Book not found."});
+        } 
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching book"});
+    }
+});
+
+//Task 12. Get book by author using Async/Await & Axios
+//Async function to fetch books by author
+public_users.get('/author/:author', async function (req,res) {
+    try {
+        const author = req.params.author.toLowerCase();
+        const response = await new Promise((resolve) => {
+            const filteredBooks = Object.values(books).filter(book => book.author.toLowerCase() === author);
+            resolve(filteredBooks);
+        });
+
+        if (response.length > 0) {
+            res.status(200).json(response);
+        } else {
+            res.status(404).json({ message: "No books found for this author" });
+        }
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching books by author" });
+    }
 });
 
 module.exports.general = public_users;
