@@ -5,19 +5,23 @@ const regd_users = express.Router();
 
 let users = [];
 
-const isValid = (username)=>{ //returns boolean
-//write code to check is the username is valid
-}
+//Function to check if the username already exists
+const isValid = (username)=>{
+    return users.some(user => user.username === username);
+};
 
+//Function to check if username & password match an existing user
 const authenticatedUser = (username,password)=>{
     return users.some(user => user.username === username && user.password === password);
 };
 
 //Task 7. only registered users can login
 regd_users.post("/login", (req,res) => {
+    const { username, password } = req.body;
+    
     //Check if username or password is missing
     if (!username || !password) {
-        return res.status(404).json({ message: "Error logging in"});
+        return res.status(400).json({ message: "Username and password required"});
     }
     //Authenticate user
     if (authenticatedUser(username, password)) {
@@ -66,7 +70,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
 });
 
 regd_users.delete("/auth/review/:isbn", (req,res) => {
-    const isbn = req.params/isbn;
+    const isbn = req.params.isbn;
     const username = req.session.authorization?.username; //Get username from session
 
     //Check if the user is logged in

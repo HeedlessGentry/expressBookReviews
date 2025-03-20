@@ -79,7 +79,7 @@ public_users.get('/title/:title',function (req, res) {
   if (booksTitle.length > 0) {
     res.json(booksTitle);
   } else {
-    res.status(404).json({message: "No books found with this title. Go touch grass NIGGER!"});
+    res.status(404).json({message: "No books found with this title. Go touch grass!"});
   }
 });
 
@@ -90,7 +90,7 @@ public_users.get('/review/:isbn',function (req, res) {
   if (books[isbn]) {
     res.json(books[isbn].reviews); //Return book reviews if ISBN exists
   } else {
-    res.status(404).json({message: "Book not found FAGGOT!!"});
+    res.status(404).json({message: "Book not found!"});
   }
 });
 
