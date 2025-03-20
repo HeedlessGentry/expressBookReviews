@@ -6,6 +6,12 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 //Task 6. Registering new users
+//Function to check if a user already exists
+const doesExist = (username) => {
+    return users.some((user) => user.username === username);
+};
+
+//Register new user
 public_users.post("/register", (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
